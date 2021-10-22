@@ -425,16 +425,106 @@ public class Juego extends JFrame implements ActionListener{
 	}
 	
 
+	//FUNCION PARA COMENZAR LOS PARAMETROS 
+	//EL JUEGO O INICIAR UNA NUEVA PARTIDA
 	public void iniciar() {
-		// TODO Auto-generated method stub
+		//ERRORES EN 0
+		intentos=0;
+		imagen.setIcon(imgs[0]);
+		pane.setText("");
+		//PARA ACTIVAR LAS LETRAS DEL TABLERO
+		for (int i=1;i<27; i++) {
+			btns[i].setEnabled(true);
+		}
+		//PARA GENERAR UNA PALABRA ALEATORIAMENTE
+		ran= (int) 0+(int)(Math.random()*((msgs.length-1)+1));
+		//SEPARA EL  MENSAJE POR PALABRAS
+		String pal[]= msgs[ran].split("");
+		res= new String[msgs[ran].length()+1];
+		int j=0;
+		//seran los guiones que van debajo de las letras como una separacion
+		for(String pal1:pal) {
+			for (int i=0; i<pal1.length();i++) {
+				pane.setText(pane.getText()+"\n");
+				res[j++]="_";
+			}
+			pane.setText(pane.getText()+"\n");
+			res[j++]="_";
+		}
 		
 	}
 
 
 	public void checarLetra(ActionEvent e) {
-		// TODO Auto-generated method stub
+		JButton bt= (JButton) e.getSource();
+		char c[];
+		//BUSCAR LA LETRA EN LA PALABRA DESPUES DE HABER SIDO PRESIONADA
+		for(int i=1; i<27;i++){
+			if(bt==btns[i]) {
+				//LA TECLA ES INICIALIZADA
+				c= Character.toChars(64+i);
+				//BUSCA SI LA LETRA ESTA EN LA FRASE
+				boolean esta= false;
+				for(int j=0; j< msgs[ran].length();j++) {
+					if(c[0]==msgs[ran].charAt(j)) {
+						res[j]=c[O]+"";
+						esta=true;
+					}
+				}
+			
+				//SI LA LETRA ESTA EN EL MENSAJE SE MUESTRA EN EL TEXTPANE
+				if(esta) {
+					pane.setText("");
+					for(String re: res) {
+						if("".equals(re)) {
+							pane.setText(pane.getText()+"\n");
+						}
+						else {
+							pane.setText(pane.getText()+re+"");
+						}
+					}
+					//HACE UNA COMP DE LAS LETRAS RESTANTES Y FALTANTES,...
+					boolean gano= true;
+					for(String re:res) {
+						if(re.equals("_")) {
+							gano=false;
+							break;
+						}
+					}
+					//AL SER CORRECTA SE MUESTRA MENSAJE Y REINICIA JEUGO
+					if(gano) {
+						JOptionPane.showMessageDialog(this, "FELICIDADES "+nombre+"\nVMos por mas");
+						partidas++;
+						iterador=5;
+						iniciar();
+						return;
+					}
+				}
+				//SI LA LETRA NO ESTA EN EL MSM, SE INCREMETA EL ERROR
+				else {
+					imagen.setIcon(imgs[++intentos]);
+					iterador--;
+					JOptionPane.showMessageDialog(this, "Te quedan "+ intentos);
+					
+					//SI SE LLEGA A LOS 5 ERRORES ENTONCES E PIERDE EL JEUGPO
+					
+					if(intentos==5) {
+						JOptionPane.showMessageDialog(this, "PErdiste la respuesta era "+ msgs[ran]);	
+						derrotas++;
+						iterador=5;
+						iniciar();
+						return;
+					}
+				}
+				//ESTA ES LA LINEA QUE DESACTIVA LAS LETRAS DESPUES DE SER USADAS
+				bt.setEnabled(false);
+				break;
+			}
+			
+		}
 		
 	}
+
 
 
 	public static void main(String[] args) {
