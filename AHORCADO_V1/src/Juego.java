@@ -467,7 +467,7 @@ public class Juego extends JFrame implements ActionListener{
 				boolean esta= false;
 				for(int j=0; j< msgs[ran].length();j++) {
 					if(c[0]==msgs[ran].charAt(j)) {
-						res[j]=c[O]+"";
+						res[j]=c[0]+"";
 						esta=true;
 					}
 				}
@@ -509,7 +509,7 @@ public class Juego extends JFrame implements ActionListener{
 					//SI SE LLEGA A LOS 5 ERRORES ENTONCES E PIERDE EL JEUGPO
 					
 					if(intentos==5) {
-						JOptionPane.showMessageDialog(this, "PErdiste la respuesta era "+ msgs[ran]);	
+						JOptionPane.showMessageDialog(this, "Perdiste la respuesta era "+ msgs[ran]);	
 						derrotas++;
 						iterador=5;
 						iniciar();
@@ -527,24 +527,27 @@ public class Juego extends JFrame implements ActionListener{
 
 
 
-	public static void main(String[] args) {
-		
-		
-		
-		
-		
-
-	}
-
-	public void setVisible(boolean b) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		if(e.getSource()==reiniciar) {
+			iniciar();
+		}
 		
-	}
+		if(e.getSource()==salir) {
+			if(partidas==0 && derrotas==0) {
+				JOptionPane.showMessageDialog(null, nombre + "No jugaste ninguna partida");
+				System.exit(0);
+			}else {
+				JOptionPane.showMessageDialog(null, nombre + "Tus resultados fueron \n"
+							+ "Ganaste"+partidas + "partidas.\n"
+							+ "Perdiste: "+ derrotas+ "partidas\n"
+							+ "VUELVE PRONTO");
+				System.exit(0);
+			}
+		}
+		
+	} 
 
 }
